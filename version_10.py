@@ -110,7 +110,7 @@ def prepareTrainingSet():
             ])
 
     
-    for directory in range(0, 3):
+    for directory in range(0, 84):
         print("---------------------", directory)
         class_names.append(directory)
         for picture in gb.glob("./cluttered/"+str(directory)+"/*.png"):
@@ -127,29 +127,6 @@ def prepareTrainingSet():
             
     
     return listShuffling(trainings, labels); # Shuffling lists
-
-
-
-def probability(ps):
-    
-    guess = ['0b570f848b40490b88048ae7dac5ae0e.png', '2bdb10c78f2d4a0cb684b5f0b27b4ac6.png', '00bf0cbf395e4dcea93b3d7a8b7e7bfb.png']
-    
-    for p, i in sorted([(p, i) for i, p in enumerate(ps)], reverse=True):
-        print("Predicted: ", i, " Probability: ",  (p * 100), "%")
-        img = readImage("./cluttered/"+str(i)+"/"+guess[i])
-        plt.imshow(img)
-        plt.show()
-        print("--------------------------\n")
-        break
-
-
-def show_error(err):
-    _, p, label, img = err    
-    print('Actual:', label)
-    plt.imshow(img)
-    plt.show()
-    probability(p)
-
 
     
 # Initializing image training list and image label list 
@@ -285,25 +262,3 @@ plot_confusion_matrix(cm, classes=class_names, title='Non-Normalized')
 plt.figure()
 plot_confusion_matrix(cm, classes=class_names, normalize=True, title='Normalized')
 plt.show()
-
-
-
-"""
-#  Missclassification
-predictions = model.predict(X_test)
-y_classes = predictions.argmax(axis=-1)
-probabilities = model.predict(X_test)
-
-errors = []
-
-for x, y, g, p in zip(X_test, y_test, y_classes, probabilities):    
-    if not y[g]:        
-        errors.append( (p[g], p, y.argmax(), x[:,:,0]) )
-
-
-print("Total Errors: ", len(errors), "\n")
-
-
-for i in range(len(errors)):
-    show_error(errors[i])
- """
