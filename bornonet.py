@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import keras.backend as K
 import itertools
 from imgaug import augmenters as iaa
-from spatial_transformer import SpatialTransformer
 from keras.layers.core import Dense, Flatten, Dropout
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.utils import np_utils
