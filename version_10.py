@@ -100,13 +100,13 @@ def prepareTrainingSet():
     """
     Preparing the image training list and image label list 
     """
+    
+    r = random.randint(1,6)
 
     seq = iaa.Sequential([
-            iaa.Affine(scale=(1.2, 1.2)),
-            iaa.Crop(px=(2, 2)),
-            iaa.Affine(translate_px={"x": (-2, 2), "y": (-2, 2)}),
-            iaa.Affine(rotate=(-15, 15)),
-            iaa.AdditiveGaussianNoise(scale=(0, 0.02 * 255))
+            iaa.Affine(translate_px={"x": (-r, r), "y": (-r, r)}),
+            iaa.Affine(rotate=(-10, 10)),
+            iaa.Affine(scale={"x": (r, r), "y": (r, r)})
             ])
 
     
@@ -179,6 +179,7 @@ weights = [W, b.flatten()]
 
 visible = Input(shape=input_shape)
 
+"""
 locnet = Flatten()(visible)
 locnet = Dense(50)(locnet)
 locnet = Dense(units=50, activation='relu')(locnet)
@@ -187,10 +188,11 @@ locnet = Model(input=visible, output=locnet)
 
 #STN
 stn = SpatialTransformer(localization_net=locnet, output_size=(28,28), input_shape=input_shape)(visible)
+"""
 
 
 #Convolution
-conv1 = Convolution2D(32, kernel_size=(5, 5), activation='relu', padding='same')(stn)
+conv1 = Convolution2D(32, kernel_size=(5, 5), activation='relu', padding='same')(visible)
 conv2 = Convolution2D(32, kernel_size=(5, 5), activation='relu', padding='same')(conv1)
 #Pooling
 pool1 = MaxPooling2D(pool_size=(2, 2))(conv2)
@@ -235,15 +237,15 @@ YY = model.layers[0].output
 F = K.function([XX], [YY])
 
 nb_epochs = 100
-batch_size = 256
+batch_size = 86
 fig = plt.figure()
 
 
 checkpoint = ModelCheckpoint('borno.h5', monitor='val_acc', verbose=1, save_best_only=True, mode='max')
-model.fit( X_train, y_train, validation_data = (X_test, y_test), epochs = nb_epochs, batch_size = 256,callbacks=[checkpoint] )
+model.fit( X_train, y_train, validation_data = (X_test, y_test), epochs = nb_epochs, batch_size = batch_size, callbacks=[checkpoint] )
 
 #model.load_weights('borno.h5')
-#model.fit( X_train, y_train, validation_data = (X_test, y_test), epochs = nb_epochs, batch_size = 256 )
+#model.fit( X_train, y_train, validation_data = (X_test, y_test), epochs = nb_epochs, batch_size = batch_size)
 
 
 # Plotting Confusion Matrix
