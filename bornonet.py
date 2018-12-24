@@ -223,7 +223,7 @@ XX = model.input
 YY = model.layers[0].output
 F = K.function([XX], [YY])
 
-nb_epochs = 1
+nb_epochs = 100
 batch_size = 86
 fig = plt.figure()
 
