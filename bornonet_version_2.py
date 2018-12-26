@@ -103,6 +103,7 @@ def prepareTrainingSet():
     r = random.randint(1,6)
 
     seq = iaa.Sequential([
+            iaa.Affine(translate_px={"x": (-r, r), "y": (-r, r)}),
             iaa.Affine(rotate=(-10, 10)),
             iaa.Affine(scale={"x": (r, r), "y": (r, r)}),
             iaa.AdditiveGaussianNoise(scale=(0, 0.02 * 255))
