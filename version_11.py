@@ -242,11 +242,28 @@ fig = plt.figure()
 
 
 checkpoint = ModelCheckpoint('stn.h5', monitor='val_acc', verbose=1, save_best_only=True, mode='max')
-model.fit( X_train, y_train, validation_data = (X_test, y_test), epochs = nb_epochs, batch_size = batch_size, callbacks=[checkpoint] )
+history = model.fit( X_train, y_train, validation_data = (X_test, y_test), epochs = nb_epochs, batch_size = batch_size, callbacks=[checkpoint] )
 
 #model.load_weights('borno.h5')
 #model.fit( X_train, y_train, validation_data = (X_test, y_test), epochs = nb_epochs, batch_size = batch_size)
 
+# Plot training & validation accuracy values
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('Model accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
+
+# Plot training & validation loss values
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Model loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
 
 # Plotting Confusion Matrix
 y_pred = model.predict(X_test)
